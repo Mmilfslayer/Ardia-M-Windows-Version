@@ -1,0 +1,74 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Node.js / pnpm
+node_modules/
+**/node_modules/
+.pnpm-store/
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.exp
+*.lib
+
+# Tauri
+crates/ardia-ui/target/
+crates/ardia-ui/ui/dist/
+crates/ardia-ui/ui/.vite/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+crash.log
+
+# Ardia data (local)
+Ardia/
+*.db
+*.db-journal
+*.db-wal
+
+# WebView2 user data
+WebView2/
+
+# Milestone tracking
+.milestone/
+
+# Test coverage
+coverage/
+*.lcov
+
+# Profiling
+*.profraw
+*.profdata
+
+# Temporary
+*.tmp
+*.temp
+.tmp/
+temp/

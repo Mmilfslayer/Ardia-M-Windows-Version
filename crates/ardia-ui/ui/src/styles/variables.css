@@ -1,0 +1,178 @@
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'SF Mono', Monaco, monospace;
+
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f3f3;
+  --bg-tertiary: #e8e8e8;
+  --bg-hover: #e0e0e0;
+  --bg-active: #d0d0d0;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --bg-modal: #ffffff;
+
+  --fg-primary: #000000;
+  --fg-secondary: #333333;
+  --fg-tertiary: #666666;
+  --fg-muted: #999999;
+  --fg-inverse: #ffffff;
+
+  --accent: #0066cc;
+  --accent-hover: #0052a3;
+  --accent-light: #e6f0fa;
+  --accent-alpha: rgba(0, 102, 204, 0.2);
+
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+
+  --border: #d0d0d0;
+  --border-hover: #b0b0b0;
+  --border-focus: #0066cc;
+  --border-error: #ef4444;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --transition-fast: 120ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow: 300ms ease;
+
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 48px;
+  --toolbar-height: 44px;
+  --tab-height: 36px;
+  --tab-min-width: 160px;
+  --tab-max-width: 280px;
+
+  --z-dropdown: 100;
+  --z-modal: 200;
+  --z-tooltip: 300;
+  --z-toast: 400;
+  --z-context-menu: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #242424;
+    --bg-tertiary: #2d2d2d;
+    --bg-hover: #333333;
+    --bg-active: #3d3d3d;
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+    --bg-modal: #242424;
+
+    --fg-primary: #ffffff;
+    --fg-secondary: #cccccc;
+    --fg-tertiary: #999999;
+    --fg-muted: #666666;
+    --fg-inverse: #000000;
+
+    --accent: #4da3ff;
+    --accent-hover: #6db3ff;
+    --accent-light: #1a3a5c;
+    --accent-alpha: rgba(77, 163, 255, 0.2);
+
+    --success: #34d399;
+    --success-light: #064e3b;
+    --warning: #fbbf24;
+    --warning-light: #78350f;
+    --error: #f87171;
+    --error-light: #7f1d1d;
+
+    --border: #3d3d3d;
+    --border-hover: #4d4d4d;
+    --border-focus: #4da3ff;
+    --border-error: #f87171;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+  }
+}
+
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f3f3;
+  --bg-tertiary: #e8e8e8;
+  --bg-hover: #e0e0e0;
+  --bg-active: #d0d0d0;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --bg-modal: #ffffff;
+
+  --fg-primary: #000000;
+  --fg-secondary: #333333;
+  --fg-tertiary: #666666;
+  --fg-muted: #999999;
+  --fg-inverse: #ffffff;
+
+  --accent: #0066cc;
+  --accent-hover: #0052a3;
+  --accent-light: #e6f0fa;
+  --accent-alpha: rgba(0, 102, 204, 0.2);
+
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+
+  --border: #d0d0d0;
+  --border-hover: #b0b0b0;
+  --border-focus: #0066cc;
+  --border-error: #ef4444;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #242424;
+  --bg-tertiary: #2d2d2d;
+  --bg-hover: #333333;
+  --bg-active: #3d3d3d;
+  --bg-overlay: rgba(0, 0, 0, 0.7);
+  --bg-modal: #242424;
+
+  --fg-primary: #ffffff;
+  --fg-secondary: #cccccc;
+  --fg-tertiary: #999999;
+  --fg-muted: #666666;
+  --fg-inverse: #000000;
+
+  --accent: #4da3ff;
+  --accent-hover: #6db3ff;
+  --accent-light: #1a3a5c;
+  --accent-alpha: rgba(77, 163, 255, 0.2);
+
+  --success: #34d399;
+  --success-light: #064e3b;
+  --warning: #fbbf24;
+  --warning-light: #78350f;
+  --error: #f87171;
+  --error-light: #7f1d1d;
+
+  --border: #3d3d3d;
+  --border-hover: #4d4d4d;
+  --border-focus: #4da3ff;
+  --border-error: #f87171;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+}

@@ -1,0 +1,18 @@
+[package]
+name = "ardia-webview2"
+version = "0.1.0"
+edition = "2021"
+description = "WebView2 Rust bindings for Ardia"
+
+[dependencies]
+webview2 = { workspace = true }
+webview2-com = { workspace = true }
+windows = { workspace = true }
+windows-result = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+url = { workspace = true }

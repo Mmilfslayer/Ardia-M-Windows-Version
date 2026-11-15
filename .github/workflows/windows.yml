@@ -1,0 +1,181 @@
+name: Build Windows
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Build as release'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-C target-cpu=native"
+  PNPM_VERSION: "9"
+
+jobs:
+  build:
+    name: Build (Windows)
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          target: x86_64-pc-windows-msvc
+          components: rustfmt, clippy
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: "cargo-${{ hashFiles('**/Cargo.lock') }}"
+          save-if: ${{ github.event_name != 'pull_request' }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: crates/ardia-ui/ui/pnpm-lock.yaml
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Restore pnpm cache
+        id: pnpm-cache
+        uses: actions/cache@v4
+        with:
+          path: crates/ardia-ui/ui/node_modules
+          key: pnpm-${{ runner.os }}-${{ hashFiles('crates/ardia-ui/ui/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+      - name: Install pnpm dependencies
+        if: steps.pnpm-cache.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile
+        working-directory: crates/ardia-ui/ui
+
+      - name: Build Rust workspace
+        run: cargo build --release --workspace --locked
+        shell: pwsh
+
+      - name: Build UI (TypeScript/React)
+        run: pnpm run build
+        working-directory: crates/ardia-ui/ui
+
+      - name: Verify binary exists
+        run: |
+          $binary = "crates/ardia-ui/target/x86_64-pc-windows-msvc/release/ardia.exe"
+          if (Test-Path $binary) {
+            $size = (Get-Item $binary).Length / 1MB
+            Write-Host "Binary found: $binary ($([math]::Round($size, 2)) MB)"
+          } else {
+            Write-Error "Binary not found at $binary"
+            exit 1
+          }
+        shell: pwsh
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ardia-windows-${{ github.run_number }}-${{ github.sha }}
+          path: |
+            crates/ardia-ui/target/x86_64-pc-windows-msvc/release/ardia.exe
+            crates/ardia-ui/target/release/bundle/
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload UI dist for debugging
+        uses: actions/upload-artifact@v4
+        with:
+          name: ardia-ui-dist-${{ github.run_number }}
+          path: crates/ardia-ui/ui/dist/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  test:
+    name: Unit Tests
+    runs-on: windows-latest
+    timeout-minutes: 30
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          target: x86_64-pc-windows-msvc
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: "cargo-${{ hashFiles('**/Cargo.lock') }}"
+
+      - name: Run Rust tests
+        run: cargo test --workspace --locked
+        shell: pwsh
+
+      - name: Run UI tests
+        run: pnpm run test
+        working-directory: crates/ardia-ui/ui
+
+  clippy:
+    name: Clippy Lint
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Cache Cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: "cargo-${{ hashFiles('**/Cargo.lock') }}"
+
+      - name: Run Clippy
+        run: cargo clippy --workspace --locked -- -D warnings
+        shell: pwsh
+
+  fmt:
+    name: Format Check
+    runs-on: windows-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Check formatting
+        run: cargo fmt --all --check
+        shell: pwsh

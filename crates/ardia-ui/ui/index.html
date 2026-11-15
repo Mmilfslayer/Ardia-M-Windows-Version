@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Ardia - A fast, privacy-focused browser for Windows" />
+    <title>Ardia</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body, #root {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg-primary, #ffffff);
+        color: var(--fg-primary, #000000);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f3f3f3;
+        --bg-tertiary: #e8e8e8;
+        --bg-hover: #e0e0e0;
+        --bg-active: #d0d0d0;
+        --fg-primary: #000000;
+        --fg-secondary: #333333;
+        --fg-tertiary: #666666;
+        --fg-muted: #999999;
+        --accent: #0066cc;
+        --accent-hover: #0052a3;
+        --border: #d0d0d0;
+        --border-focus: #0066cc;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+        --transition-fast: 120ms ease;
+        --transition-normal: 200ms ease;
+        --sidebar-width: 280px;
+        --toolbar-height: 44px;
+        --tab-height: 36px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-primary: #1a1a1a;
+          --bg-secondary: #242424;
+          --bg-tertiary: #2d2d2d;
+          --bg-hover: #333333;
+          --bg-active: #3d3d3d;
+          --fg-primary: #ffffff;
+          --fg-secondary: #cccccc;
+          --fg-tertiary: #999999;
+          --fg-muted: #666666;
+          --accent: #4da3ff;
+          --accent-hover: #6db3ff;
+          --border: #3d3d3d;
+          --border-focus: #4da3ff;
+        }
+      }
+      ::selection {
+        background: var(--accent);
+        color: white;
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--fg-muted);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--fg-tertiary);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

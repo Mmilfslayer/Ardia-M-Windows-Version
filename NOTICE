@@ -1,0 +1,143 @@
+Ardia Windows
+=============
+
+This product includes software developed by the Ardia Authors.
+
+Third-party components:
+-----------------------
+
+WebView2 (Microsoft Corporation)
+- License: Microsoft Software License Terms
+- Source: Built into Windows 10/11
+- URL: https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+
+Tauri (Tauri Programme within The Commons Conservancy)
+- License: MIT OR Apache-2.0
+- URL: https://tauri.app/
+
+windows-rs (Microsoft Corporation)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/microsoft/windows-rs
+
+webview2-com (Microsoft Corporation)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/microsoft/webview2-rs
+
+Rusqlite (Rusqlite Contributors)
+- License: MIT
+- URL: https://github.com/rusqlite/rusqlite
+
+Tokio (Tokio Contributors)
+- License: MIT
+- URL: https://tokio.rs/
+
+Serde (Serde Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://serde.rs/
+
+Anyhow (Anyhow Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/dtolnay/anyhow
+
+Thiserror (Thiserror Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/dtolnay/thiserror
+
+Uuid (Uuid Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/uuid-rs/uuid
+
+Chrono (Chrono Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/chronotope/chrono
+
+Url (Url Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/servo/rust-url
+
+Aes-gcm (Aes-gcm Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/RustCrypto/AEADs
+
+Pbkdf2 (RustCrypto Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/RustCrypto/password-hashes
+
+Zeroize (Zeroize Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/RustCrypto/traits
+
+Tracing (Tracing Contributors)
+- License: MIT
+- URL: https://github.com/tokio-rs/tracing
+
+Dirs (Dirs Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/dirs-dev/dirs-rs
+
+Config-rs (Config-rs Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/mehcode/config-rs
+
+Sqlx (Sqlx Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://github.com/launchbadge/sqlx
+
+Tauri Plugins (Tauri Contributors)
+- License: MIT OR Apache-2.0
+- URL: https://tauri.app/plugins/
+
+React (Meta Platforms, Inc.)
+- License: MIT
+- URL: https://reactjs.org/
+
+TypeScript (Microsoft Corporation)
+- License: Apache-2.0
+- URL: https://www.typescriptlang.org/
+
+Vite (Vite Contributors)
+- License: MIT
+- URL: https://vitejs.dev/
+
+Zustand (Zustand Contributors)
+- License: MIT
+- URL: https://github.com/pmndrs/zustand
+
+Lucide React (Lucide Contributors)
+- License: ISC
+- URL: https://lucide.dev/
+
+Date-fns (Date-fns Contributors)
+- License: MIT
+- URL: https://date-fns.org/
+
+Clsx (Clsx Contributors)
+- License: MIT
+- URL: https://github.com/lukeed/clsx
+
+Tailwind CSS (Tailwind Labs Inc.)
+- License: MIT
+- URL: https://tailwindcss.com/
+
+PostCSS (PostCSS Contributors)
+- License: MIT
+- URL: https://postcss.org/
+
+Autoprefixer (Andrey Sitnik)
+- License: MIT
+- URL: https://github.com/postcss/autoprefixer
+
+Original Ardia (macOS) - Ported components:
+- Apache-2.0 License
+- URL: https://github.com/mantrakp04/ardia
+
+Helium (Chromium fork by Microsoft)
+- BSD-3-Clause License
+- URL: https://github.com/microsoft/helium
+
+Chromium (The Chromium Authors)
+- BSD-3-Clause License
+- URL: https://chromium.org/
+
+This product bundles WebView2 which uses Chromium. The Chromium binary is not included
+in this distribution - it uses the system-provided WebView2 runtime.

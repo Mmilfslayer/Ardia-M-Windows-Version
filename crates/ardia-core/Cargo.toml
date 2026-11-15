@@ -1,0 +1,38 @@
+[package]
+name = "ardia-core"
+version = "0.1.0"
+edition = "2021"
+description = "Core browser logic for Ardia Windows"
+
+[dependencies]
+# Workspace dependencies
+webview2 = { workspace = true }
+webview2-com = { workspace = true }
+windows = { workspace = true }
+windows-result = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+config = { workspace = true }
+dirs = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+url = { workspace = true }
+percent-encoding = { workspace = true }
+aes-gcm = { workspace = true }
+pbkdf2 = { workspace = true }
+zeroize = { workspace = true }
+rusqlite = { workspace = true }
+sqlx = { workspace = true }
+tauri-ipc = { workspace = true }
+
+# Additional dependencies
+once_cell = "1.19"
+parking_lot = "0.12"
+dashmap = "5.5"
