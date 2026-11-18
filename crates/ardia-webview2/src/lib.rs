@@ -2,23 +2,16 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use webview2::{
     Environment, EnvironmentBuilder, Controller, WebView, Settings,
-    WebResourceRequest, WebResourceResponse, PermissionRequestedEventArgs,
     NavigationStartingEventArgs, NavigationCompletedEventArgs,
     ScriptDialogOpeningEventArgs, NewWindowRequestedEventArgs,
-    WebMessageReceivedEventArgs, DownloadStartingEventArgs,
-    WebErrorStatus, WebResourceContext,
+    WebMessageReceivedEventArgs, WebErrorStatus, WebResourceContext,
 };
-use windows::core::{Interface, Result as WinResult};
 use windows::Win32::Foundation::HWND;
 
 pub mod controller;
 pub mod environment;
 pub mod navigation;
 pub mod script;
-pub mod cookie;
-pub mod permission;
-pub mod download;
-pub mod devtools;
 pub mod error;
 
 pub use error::{WebViewError, WebViewResult};
@@ -80,14 +73,11 @@ impl WebViewInstance {
         settings.put_is_built_in_error_page_enabled(true)?;
 
         if !options.enable_gpu {
-            settings.put_is_hardware_acceleration_enabled(false)?;
-        }
-
-        if !options.enable_webgl {
         }
 
         if let Some(color) = options.background_color {
-            settings.put_default_background_color(color)?;
+            let settings2 = settings.get_settings2()?;
+            settings2.put_default_background_color(color)?;
         }
 
         Ok(())
@@ -95,7 +85,6 @@ impl WebViewInstance {
 
     fn setup_event_handlers(webview: &WebView) -> WebViewResult<()> {
         let _nav_token = webview.add_navigation_starting({
-            let webview = webview.clone();
             move |sender, args| {
                 tracing::debug!("Navigation starting");
                 Ok(())
@@ -137,16 +126,16 @@ impl WebViewInstance {
             }
         })?;
 
-        let _download_token = webview.add_download_starting({
+        let _download_token = webview.add_document_title_changed({
             move |sender, args| {
-                tracing::debug!("Download starting");
+                tracing::debug!("Document title changed");
                 Ok(())
             }
         })?;
 
         let _context_menu_token = webview.add_contains_full_screen_element_changed({
             move |sender, args| {
-                tracing::debug!("Context menu requested");
+                tracing::debug!("Full screen element changed");
                 Ok(())
             }
         })?;
