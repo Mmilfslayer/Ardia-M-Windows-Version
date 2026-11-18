@@ -43,7 +43,6 @@ tauri-plugin-updater = "2.0.0"
 
 # Database
 rusqlite = { version = "0.31", features = ["bundled", "vtab", "extra_check"] }
-sqlx = { version = "0.7", features = ["runtime-tokio", "uuid", "chrono", "macros"] }
 
 # Async
 tokio = { version = "1.38", features = ["full"] }
@@ -69,6 +68,12 @@ uuid = { version = "1.6", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 url = "2.5"
 percent-encoding = "2.3"
+toml = "0.8"
+urlencoding = "2.1"
+regex = "1.10"
+sha2 = "0.10"
+base64 = "0.22"
+open = "5.0"
 
 # Crypto (for passwords - Windows DPAPI)
 aes-gcm = "0.10"
