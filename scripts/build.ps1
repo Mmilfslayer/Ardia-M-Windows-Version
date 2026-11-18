@@ -61,7 +61,7 @@ try {
 # Build Rust workspace
 Write-Host "`n--- Building Rust Workspace ---" -ForegroundColor Yellow
 $cargoArgs = @("build", "--workspace", $cargoTarget, "--target", $Target)
-if ($Release) { $cargoArgs += "--locked" }
+# Don't use --locked on first build or when dependencies changed
 & cargo @cargoArgs
 
 if ($LASTEXITCODE -ne 0) {

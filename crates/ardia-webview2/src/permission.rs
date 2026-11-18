@@ -1,4 +1,4 @@
-use webview2_com::{CoreWebView2, ICoreWebView2, PermissionRequestedEventArgs, PermissionKind, PermissionState};
+use webview2::{WebView, PermissionRequestedEventArgs, PermissionKind, PermissionState, EventRegistrationToken};
 use windows::core::Result as WinResult;
 
 use crate::{WebViewError, WebViewResult};
@@ -30,7 +30,7 @@ impl From<PermissionKind> for PermissionType {
             PermissionKind::MultipleAutomaticDownloads => PermissionType::MultipleAutomaticDownloads,
             PermissionKind::PointerLock => PermissionType::PointerLock,
             PermissionKind::MidiSysex => PermissionType::MidiSysex,
-            _ => PermissionType::Microphone, // Default fallback
+            _ => PermissionType::Microphone,
         }
     }
 }
@@ -53,36 +53,34 @@ impl From<PermissionDecision> for PermissionState {
 }
 
 pub fn get_permission_request_info(args: &PermissionRequestedEventArgs) -> WebViewResult<(String, PermissionType, bool)> {
-    let uri = args.get_Uri()?.to_string();
-    let kind: PermissionType = args.get_PermissionKind()?.into();
-    let is_user_initiated = args.get_IsUserInitiated()?.as_bool();
+    let uri = args.get_uri()?;
+    let kind: PermissionType = args.get_permission_kind()?.into();
+    let is_user_initiated = args.get_is_user_initiated()?;
     Ok((uri, kind, is_user_initiated))
 }
 
 pub fn set_permission_state(args: &PermissionRequestedEventArgs, decision: PermissionDecision) -> WebViewResult<()> {
-    args.put_State(decision.into())?;
+    args.put_state(decision.into())?;
     Ok(())
 }
 
-pub fn add_permission_requested_handler<F>(webview: &CoreWebView2, handler: F) -> WebViewResult<i64>
+pub fn add_permission_requested_handler<F>(webview: &WebView, handler: F) -> WebViewResult<EventRegistrationToken>
 where
-    F: Fn(&CoreWebView2, &PermissionRequestedEventArgs) -> WinResult<()> + Send + 'static,
+    F: Fn(WebView, PermissionRequestedEventArgs) -> WinResult<()> + Send + 'static,
 {
-    let token = webview.add_PermissionRequested(handler)?;
+    let token = webview.add_permission_requested(handler)?;
     Ok(token)
 }
 
-pub fn remove_permission_requested_handler(webview: &CoreWebView2, token: i64) -> WebViewResult<()> {
-    webview.remove_PermissionRequested(token)?;
+pub fn remove_permission_requested_handler(webview: &WebView, token: EventRegistrationToken) -> WebViewResult<()> {
+    webview.remove_permission_requested(token)?;
     Ok(())
 }
 
 pub async fn get_permission_state(
-    webview: &CoreWebView2,
+    webview: &WebView,
     url: &str,
     permission_type: PermissionType,
 ) -> WebViewResult<PermissionState> {
-    // Note: This would require calling get_PermissionState on the webview
-    // which is available in newer WebView2 versions
     Ok(PermissionState::Default)
 }

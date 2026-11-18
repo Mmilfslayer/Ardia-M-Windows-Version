@@ -7,12 +7,12 @@ members = [
 resolver = "2"
 
 [workspace.dependencies]
-# WebView2 - use the official Microsoft crate
-webview2 = { version = "0.56", features = ["webview2_1_0_3065_40"] }
-webview2-com = { version = "0.56", features = ["webview2_1_0_3065_40"] }
+# WebView2 - use the official Microsoft crate from crates.io
+webview2 = "0.1.4"
+webview2-com = "0.39.1"
 
 # Windows APIs via windows-rs
-windows = { version = "0.58", features = [
+windows = { version = "0.62", features = [
     "Win32_Foundation",
     "Win32_UI_WindowsAndMessaging",
     "Win32_UI_Controls",
@@ -28,22 +28,22 @@ windows = { version = "0.58", features = [
     "Win32_Graphics_Dwm",
     "Win32_UI_Input_KeyboardAndMouse",
 ] }
-windows-result = "0.58"
+windows-result = "0.100"
 
 # Tauri for UI integration
-tauri = { version = "2.0", features = ["custom-protocol", "tray-icon", "clipboard-manager", "fs", "dialog", "shell", "updater"] }
-tauri-plugin-store = "2.0"
-tauri-plugin-sql = { version = "2.0", features = ["rusqlite", "sqlcipher"] }
-tauri-plugin-clipboard = "2.0"
-tauri-plugin-dialog = "2.0"
-tauri-plugin-fs = "2.0"
-tauri-plugin-opener = "2.0"
-tauri-plugin-shell = "2.0"
-tauri-plugin-updater = "2.0"
+tauri = { version = "2.0.0", features = ["custom-protocol", "tray-icon"] }
+tauri-plugin-store = "2.0.0"
+tauri-plugin-sql = { version = "2.0.0", features = ["sqlite"] }
+tauri-plugin-clipboard-manager = "2.0.0"
+tauri-plugin-dialog = "2.0.0"
+tauri-plugin-fs = "2.0.0"
+tauri-plugin-opener = "2.0.0"
+tauri-plugin-shell = "2.0.0"
+tauri-plugin-updater = "2.0.0"
 
 # Database
 rusqlite = { version = "0.31", features = ["bundled", "vtab", "extra_check"] }
-sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite", "uuid", "chrono", "macros"] }
+sqlx = { version = "0.7", features = ["runtime-tokio", "uuid", "chrono", "macros"] }
 
 # Async
 tokio = { version = "1.38", features = ["full"] }
@@ -74,9 +74,6 @@ percent-encoding = "2.3"
 aes-gcm = "0.10"
 pbkdf2 = "0.12"
 zeroize = "1.8"
-
-# IPC
-tauri-ipc = "2.0"
 
 # Testing
 mockall = { version = "0.13", features = ["nightly"] }

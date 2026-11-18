@@ -1,9 +1,12 @@
 use std::path::PathBuf;
 use std::sync::Arc;
-use webview2_com::{
-    CoreWebView2, CoreWebView2Controller, CoreWebView2Environment,
-    CoreWebView2Settings, ICoreWebView2Controller, ICoreWebView2,
-    ICoreWebView2Environment, ICoreWebView2Settings,
+use webview2::{
+    Environment, EnvironmentBuilder, Controller, WebView, Settings,
+    WebResourceRequest, WebResourceResponse, PermissionRequestedEventArgs,
+    NavigationStartingEventArgs, NavigationCompletedEventArgs,
+    ScriptDialogOpeningEventArgs, NewWindowRequestedEventArgs,
+    WebMessageReceivedEventArgs, DownloadStartingEventArgs,
+    WebErrorStatus, WebResourceContext,
 };
 use windows::core::{Interface, Result as WinResult};
 use windows::Win32::Foundation::HWND;
@@ -25,7 +28,7 @@ pub struct WebViewOptions {
     pub user_data_folder: PathBuf,
     pub enable_gpu: bool,
     pub enable_webgl: bool,
-    pub background_color: Option<windows::Win32::Graphics::Dwm::COLORREF>,
+    pub background_color: Option<u32>,
 }
 
 impl Default for WebViewOptions {
@@ -41,18 +44,18 @@ impl Default for WebViewOptions {
     }
 }
 
-pub struct WebView {
-    pub controller: CoreWebView2Controller,
-    pub webview: CoreWebView2,
-    pub environment: Arc<CoreWebView2Environment>,
+pub struct WebViewInstance {
+    pub controller: Controller,
+    pub webview: WebView,
+    pub environment: Arc<Environment>,
     hwnd: HWND,
 }
 
-impl WebView {
+impl WebViewInstance {
     pub async fn new(hwnd: HWND, options: WebViewOptions) -> WebViewResult<Self> {
         let environment = environment::create_environment(&options).await?;
         let controller = controller::create_controller(&environment, hwnd).await?;
-        let webview = controller.get_CoreWebView2()?;
+        let webview = controller.get_webview()?;
 
         Self::configure_settings(&webview, &options)?;
         Self::setup_event_handlers(&webview)?;
@@ -65,36 +68,33 @@ impl WebView {
         })
     }
 
-    fn configure_settings(webview: &CoreWebView2, options: &WebViewOptions) -> WebViewResult<()> {
-        let settings: ICoreWebView2Settings = webview.get_Settings()?;
+    fn configure_settings(webview: &WebView, options: &WebViewOptions) -> WebViewResult<()> {
+        let settings: Settings = webview.get_settings()?;
 
-        settings.put_IsScriptEnabled(true)?;
-        settings.put_AreDefaultScriptDialogsEnabled(true)?;
-        settings.put_IsWebMessageEnabled(true)?;
-        settings.put_IsStatusBarEnabled(false)?;
-        settings.put_AreDevToolsEnabled(true)?;
-        settings.put_IsZoomControlEnabled(true)?;
-        settings.put_IsBuiltInErrorPageEnabled(true)?;
+        settings.put_is_script_enabled(true)?;
+        settings.put_are_default_script_dialogs_enabled(true)?;
+        settings.put_is_web_message_enabled(true)?;
+        settings.put_is_status_bar_enabled(false)?;
+        settings.put_are_dev_tools_enabled(true)?;
+        settings.put_is_zoom_control_enabled(true)?;
+        settings.put_is_built_in_error_page_enabled(true)?;
 
         if !options.enable_gpu {
-            settings.put_IsHardwareAccelerationEnabled(false)?;
+            settings.put_is_hardware_acceleration_enabled(false)?;
         }
 
         if !options.enable_webgl {
-            // WebGL is controlled via feature flags in newer versions
         }
 
         if let Some(color) = options.background_color {
-            // For transparency effects
-            settings.put_DefaultBackgroundColor(color)?;
+            settings.put_default_background_color(color)?;
         }
 
         Ok(())
     }
 
-    fn setup_event_handlers(webview: &CoreWebView2) -> WebViewResult<()> {
-        // Navigation events
-        let _nav_token = webview.add_NavigationStarting({
+    fn setup_event_handlers(webview: &WebView) -> WebViewResult<()> {
+        let _nav_token = webview.add_navigation_starting({
             let webview = webview.clone();
             move |sender, args| {
                 tracing::debug!("Navigation starting");
@@ -102,55 +102,49 @@ impl WebView {
             }
         })?;
 
-        let _nav_completed_token = webview.add_NavigationCompleted({
+        let _nav_completed_token = webview.add_navigation_completed({
             move |sender, args| {
                 tracing::debug!("Navigation completed");
                 Ok(())
             }
         })?;
 
-        // Permission requests
-        let _perm_token = webview.add_PermissionRequested({
+        let _perm_token = webview.add_permission_requested({
             move |sender, args| {
                 tracing::debug!("Permission requested");
                 Ok(())
             }
         })?;
 
-        // New window requests
-        let _new_window_token = webview.add_NewWindowRequested({
+        let _new_window_token = webview.add_new_window_requested({
             move |sender, args| {
                 tracing::debug!("New window requested");
                 Ok(())
             }
         })?;
 
-        // Web resource requests (for content blocking)
-        let _resource_token = webview.add_WebResourceRequested({
+        let _resource_token = webview.add_web_resource_requested({
             move |sender, args| {
                 tracing::trace!("Web resource requested");
                 Ok(())
             }
         })?;
 
-        // Script dialogs
-        let _dialog_token = webview.add_ScriptDialogOpening({
+        let _dialog_token = webview.add_script_dialog_opening({
             move |sender, args| {
                 tracing::debug!("Script dialog opening");
                 Ok(())
             }
         })?;
 
-        // Downloads
-        let _download_token = webview.add_DownloadStarting({
+        let _download_token = webview.add_download_starting({
             move |sender, args| {
                 tracing::debug!("Download starting");
                 Ok(())
             }
         })?;
 
-        // Context menu
-        let _context_menu_token = webview.add_ContextMenuRequested({
+        let _context_menu_token = webview.add_contains_full_screen_element_changed({
             move |sender, args| {
                 tracing::debug!("Context menu requested");
                 Ok(())
@@ -161,7 +155,7 @@ impl WebView {
     }
 
     pub fn navigate(&self, url: &str) -> WebViewResult<()> {
-        self.webview.Navigate(url)?;
+        self.webview.navigate(url)?;
         Ok(())
     }
 
@@ -177,22 +171,22 @@ impl WebView {
         self.hwnd
     }
 
-    pub fn get_controller(&self) -> &CoreWebView2Controller {
+    pub fn get_controller(&self) -> &Controller {
         &self.controller
     }
 
-    pub fn get_webview(&self) -> &CoreWebView2 {
+    pub fn get_webview(&self) -> &WebView {
         &self.webview
     }
 
     pub fn resize(&self, bounds: windows::Win32::Foundation::RECT) -> WebViewResult<()> {
-        self.controller.put_Bounds(bounds)?;
+        self.controller.put_bounds(bounds)?;
         Ok(())
     }
 }
 
-impl Drop for WebView {
+impl Drop for WebViewInstance {
     fn drop(&mut self) {
-        let _ = self.controller.Close();
+        let _ = self.controller.close();
     }
 }

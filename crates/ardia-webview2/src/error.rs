@@ -1,5 +1,5 @@
 use std::fmt;
-use webview2_com::Error as WebView2Error;
+use webview2::Error as WebView2Error;
 use windows::core::Error as WindowsError;
 
 #[derive(Debug)]

@@ -28,28 +28,17 @@ aes-gcm = { workspace = true }
 pbkdf2 = { workspace = true }
 zeroize = { workspace = true }
 rusqlite = { workspace = true }
-sqlx = { workspace = true }
-tauri-ipc = { workspace = true }
 
 # Tauri
-tauri = { version = "2.0", features = [
-    "custom-protocol",
-    "tray-icon",
-    "clipboard-manager",
-    "fs",
-    "dialog",
-    "shell",
-    "updater",
-    "macos-private-api"
-] }
-tauri-plugin-store = "2.0"
-tauri-plugin-sql = { version = "2.0", features = ["rusqlite", "sqlcipher"] }
-tauri-plugin-clipboard = "2.0"
-tauri-plugin-dialog = "2.0"
-tauri-plugin-fs = "2.0"
-tauri-plugin-opener = "2.0"
-tauri-plugin-shell = "2.0"
-tauri-plugin-updater = "2.0"
+tauri = { workspace = true }
+tauri-plugin-store = { workspace = true }
+tauri-plugin-sql = { workspace = true }
+tauri-plugin-clipboard-manager = { workspace = true }
+tauri-plugin-dialog = { workspace = true }
+tauri-plugin-fs = { workspace = true }
+tauri-plugin-opener = { workspace = true }
+tauri-plugin-shell = { workspace = true }
+tauri-plugin-updater = { workspace = true }
 
 # Ardia core
 ardia-core = { path = "../ardia-core" }

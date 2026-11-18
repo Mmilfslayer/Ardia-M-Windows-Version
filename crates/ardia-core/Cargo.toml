@@ -29,9 +29,6 @@ aes-gcm = { workspace = true }
 pbkdf2 = { workspace = true }
 zeroize = { workspace = true }
 rusqlite = { workspace = true }
-sqlx = { workspace = true }
-tauri-ipc = { workspace = true }
-
 # Additional dependencies
 once_cell = "1.19"
 parking_lot = "0.12"
