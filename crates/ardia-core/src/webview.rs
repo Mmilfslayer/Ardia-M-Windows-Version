@@ -1,16 +1,16 @@
 use std::path::PathBuf;
 use std::sync::Arc;
-use ardia_webview2::{WebView, WebViewOptions, WebViewResult};
+use ardia_webview2::{WebViewInstance, WebViewOptions, WebViewResult};
 
 use crate::error::CoreResult;
 
 pub struct WebViewWrapper {
-    inner: Arc<WebView>,
+    inner: Arc<WebViewInstance>,
 }
 
 impl WebViewWrapper {
     pub async fn new(hwnd: windows::Win32::Foundation::HWND, options: WebViewOptions) -> CoreResult<Self> {
-        let webview = WebView::new(hwnd, options).await?;
+        let webview = WebViewInstance::new(hwnd, options).await?;
         Ok(Self {
             inner: Arc::new(webview),
         })
@@ -21,8 +21,8 @@ impl WebViewWrapper {
         Ok(())
     }
 
-    pub async fn execute_script(&self, script: &str) -> CoreResult<String> {
-        let result = self.inner.execute_script(script).await?;
+    pub fn execute_script(&self, script: &str) -> CoreResult<String> {
+        let result = self.inner.execute_script(script)?;
         Ok(result)
     }
 
@@ -36,7 +36,7 @@ impl WebViewWrapper {
         Ok(())
     }
 
-    pub fn get_inner(&self) -> &WebView {
+    pub fn get_inner(&self) -> &WebViewInstance {
         &self.inner
     }
 }

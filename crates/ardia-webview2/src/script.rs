@@ -1,5 +1,4 @@
 use webview2::{WebView};
-use windows::core::Result as WinResult;
 
 use crate::{WebViewError, WebViewResult};
 
@@ -25,33 +24,13 @@ pub fn remove_script_to_execute_on_document_created(
     Ok(())
 }
 
-pub async fn execute_script(webview: &WebView, script: &str) -> WebViewResult<String> {
-    let (tx, rx) = tokio::sync::oneshot::channel();
-
+pub fn execute_script(webview: &WebView, script: &str) -> WebViewResult<String> {
+    let (tx, rx) = std::sync::mpsc::channel();
     webview.execute_script(script, move |result| {
         let _ = tx.send(result);
         Ok(())
     })?;
-
-    rx.await.unwrap_or_else(|_| Err(WebViewError::ScriptExecutionFailed(
+    rx.recv().unwrap_or(Err(WebViewError::ScriptExecutionFailed(
         "Script execution channel closed".to_string(),
     )))?
-}
-
-pub fn execute_script_sync(webview: &WebView, script: &str) -> WebViewResult<String> {
-    let (tx, rx) = std::sync::mpsc::channel();
-    webview.execute_script(
-        script,
-        move |result| {
-            let _ = tx.send(result);
-            Ok(())
-        },
-    )?;
-
-    match rx.recv() {
-        Ok(result) => Ok(result?),
-        Err(_) => Err(WebViewError::ScriptExecutionFailed(
-            "Script execution channel closed".to_string(),
-        )),
-    }
 }

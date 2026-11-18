@@ -1,14 +1,13 @@
 use webview2::{Environment, Controller};
 use windows::Win32::Foundation::{HWND, RECT};
-use windows::core::Result as WinResult;
 
 use crate::{WebViewError, WebViewResult};
 
-pub async fn create_controller(
+pub fn create_controller(
     environment: &Environment,
     hwnd: HWND,
 ) -> WebViewResult<Controller> {
-    let controller = environment.create_controller(hwnd).await?;
+    let controller = environment.create_controller(hwnd)?;
 
     let mut rect = RECT::default();
     unsafe {

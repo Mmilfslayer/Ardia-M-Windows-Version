@@ -1,17 +1,14 @@
 use std::path::Path;
-use std::sync::Arc;
 use webview2::{Environment, EnvironmentBuilder};
-use windows::core::Result as WinResult;
 
 use crate::{WebViewOptions, WebViewError, WebViewResult};
 
-pub async fn create_environment(options: &WebViewOptions) -> WebViewResult<Environment> {
+pub fn create_environment(options: &WebViewOptions) -> WebViewResult<Environment> {
     std::fs::create_dir_all(&options.user_data_folder)?;
 
     let environment = EnvironmentBuilder::new()
         .with_user_data_folder(&options.user_data_folder)
-        .build()
-        .await?;
+        .build()?;
 
     tracing::info!(
         "WebView2 environment created at: {:?}",
@@ -21,7 +18,7 @@ pub async fn create_environment(options: &WebViewOptions) -> WebViewResult<Envir
     Ok(environment)
 }
 
-pub async fn create_environment_with_options(
+pub fn create_environment_with_options(
     user_data_folder: &Path,
     browser_executable_folder: Option<&Path>,
     additional_browser_arguments: Option<&str>,
@@ -39,7 +36,7 @@ pub async fn create_environment_with_options(
         builder = builder.with_additional_browser_arguments(args);
     }
 
-    let environment = builder.build().await?;
+    let environment = builder.build()?;
 
     Ok(environment)
 }

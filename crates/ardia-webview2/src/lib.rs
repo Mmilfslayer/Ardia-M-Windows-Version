@@ -45,9 +45,9 @@ pub struct WebViewInstance {
 }
 
 impl WebViewInstance {
-    pub async fn new(hwnd: HWND, options: WebViewOptions) -> WebViewResult<Self> {
-        let environment = environment::create_environment(&options).await?;
-        let controller = controller::create_controller(&environment, hwnd).await?;
+    pub fn new(hwnd: HWND, options: WebViewOptions) -> WebViewResult<Self> {
+        let environment = environment::create_environment(&options)?;
+        let controller = controller::create_controller(&environment, hwnd)?;
         let webview = controller.get_webview()?;
 
         Self::configure_settings(&webview, &options)?;
@@ -148,8 +148,8 @@ impl WebViewInstance {
         Ok(())
     }
 
-    pub async fn execute_script(&self, script: &str) -> WebViewResult<String> {
-        script::execute_script(&self.webview, script).await
+    pub fn execute_script(&self, script: &str) -> WebViewResult<String> {
+        script::execute_script(&self.webview, script)
     }
 
     pub fn add_script_to_execute_on_document_created(&self, script: &str) -> WebViewResult<String> {

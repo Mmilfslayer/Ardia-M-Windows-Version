@@ -1,5 +1,4 @@
-use webview2::{WebView, WebResourceRequest, NavigationStartingEventArgs, NavigationCompletedEventArgs, EventRegistrationToken};
-use windows::core::Result as WinResult;
+use webview2::{WebView, NavigationStartingEventArgs, NavigationCompletedEventArgs, EventRegistrationToken, Error as WebView2Error};
 
 use crate::{WebViewError, WebViewResult};
 
@@ -50,7 +49,7 @@ pub fn can_go_forward(webview: &WebView) -> WebViewResult<bool> {
 
 pub fn add_navigation_starting_handler<F>(webview: &WebView, handler: F) -> WebViewResult<EventRegistrationToken>
 where
-    F: Fn(WebView, NavigationStartingEventArgs) -> WinResult<()> + Send + 'static,
+    F: Fn(WebView, NavigationStartingEventArgs) -> Result<(), WebView2Error> + Send + 'static,
 {
     let token = webview.add_navigation_starting(handler)?;
     Ok(token)
@@ -58,7 +57,7 @@ where
 
 pub fn add_navigation_completed_handler<F>(webview: &WebView, handler: F) -> WebViewResult<EventRegistrationToken>
 where
-    F: Fn(WebView, NavigationCompletedEventArgs) -> WinResult<()> + Send + 'static,
+    F: Fn(WebView, NavigationCompletedEventArgs) -> Result<(), WebView2Error> + Send + 'static,
 {
     let token = webview.add_navigation_completed(handler)?;
     Ok(token)
