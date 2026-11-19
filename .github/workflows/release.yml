@@ -38,18 +38,18 @@ jobs:
           key: "cargo-${{ hashFiles('**/Cargo.lock') }}"
           save-if: ${{ github.event_name != 'pull_request' }}
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-          cache-dependency-path: crates/ardia-ui/ui/pnpm-lock.yaml
-
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
           run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+          cache-dependency-path: crates/ardia-ui/ui/pnpm-lock.yaml
 
       - name: Restore pnpm cache
         id: pnpm-cache
