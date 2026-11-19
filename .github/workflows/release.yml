@@ -49,18 +49,8 @@ jobs:
         with:
           node-version: '24'
           cache: 'pnpm'
-          
-      - name: Restore pnpm cache
-        id: pnpm-cache
-        uses: actions/cache@v4
-        with:
-          path: crates/ardia-ui/ui/node_modules
-          key: pnpm-${{ runner.os }}-${{ hashFiles('crates/ardia-ui/ui/pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-${{ runner.os }}-
 
       - name: Install pnpm dependencies
-        if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
         working-directory: crates/ardia-ui/ui
 
